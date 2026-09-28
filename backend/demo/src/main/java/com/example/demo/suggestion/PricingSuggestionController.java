@@ -10,14 +10,26 @@ import java.util.List;
 public class PricingSuggestionController {
 
     private final PricingSuggestionRepository pricingRepository;
+    private final SuggestionApprovalService approvalService;
 
     public PricingSuggestionController(
-            PricingSuggestionRepository pricingRepository) {
+            PricingSuggestionRepository pricingRepository,
+            SuggestionApprovalService approvalService) {
+
         this.pricingRepository = pricingRepository;
+        this.approvalService = approvalService;
     }
 
     @GetMapping
     public List<PricingSuggestion> getAllSuggestions() {
         return pricingRepository.findAll();
+    }
+
+    @PatchMapping("/{id}")
+    public PricingSuggestion updateStatus(
+            @PathVariable Long id,
+            @RequestParam SuggestionStatus status) {
+
+        return approvalService.updatePricingStatus(id, status);
     }
 }

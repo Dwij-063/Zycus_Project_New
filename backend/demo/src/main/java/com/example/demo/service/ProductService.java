@@ -135,4 +135,25 @@ public ProductService(
 
         productRepository.deleteById(id);
     }
+
+    public void checkForDemandSpike(Long productId) {
+
+    Product product = productRepository.findById(productId)
+            .orElseThrow(() ->
+                    new RuntimeException("Product not found"));
+
+    Double categoryAverage =
+            productRepository.findAverageDemandVelocityByCategory(
+                    product.getCategory()
+            );
+
+    if (categoryAverage == null || categoryAverage <= 0) {
+        return;
+    }
+
+    suggestionService.checkDemandSpike(
+            product,
+            categoryAverage
+    );
+}
 }

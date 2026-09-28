@@ -58,5 +58,12 @@ public Product createOrder(
     return productService.createOrder(id, quantity);
 }
 
+@PostMapping("/{id}/check-demand")
+@ResponseStatus(HttpStatus.NO_CONTENT)
+public void checkDemandSpike(@PathVariable Long id) {
+
+    productService.checkForDemandSpike(id);
+}
+
 
 }
